@@ -1,0 +1,38 @@
+-- Expression evaluator
+import List;
+import State;
+
+-- The evaluator itself: takes a state and an expression,
+-- returns integer value
+--
+-- An expression is represented by a data structure of the following shape:
+--
+-- expr = Var   (string)             |
+--        Const (int)                |
+--        Binop (string, expr, expr)
+
+public fun evalBinop(operation, op1, op2) {
+   case operation of
+      "+" -> op1 + op2
+   |  "-" -> op1 - op2
+   |  "*" -> op1 * op2
+   |  "/" -> op1 / op2
+   |  "%" -> op1 % op2
+   |  "&&" -> op1 && op2
+   |  "!!" -> op1 !! op2
+   |  "==" -> op1 == op2
+   |  "!=" -> op1 != op2
+   |  "<" -> op1 < op2
+   |  ">" -> op1 > op2
+   |  "<=" -> op1 <= op2
+   |  ">=" -> op1 >= op2
+   esac
+}
+
+public fun evalExpr (state, expr) {
+   case expr of
+      Var(var_name) -> state(var_name)
+   |  Const(value) -> value
+   |  Binop(operation, op1, op2) -> evalBinop(operation, evalExpr(state, op1), evalExpr(state, op2))
+   esac
+}
